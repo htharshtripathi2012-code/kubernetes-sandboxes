@@ -1,3 +1,55 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: alpine-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: python-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: cpp-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: debian-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 1Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -136,3 +188,90 @@ spec:
       - name: storage
         persistentVolumeClaim:
           claimName: debian-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: linux-sandbox-alpine-svc
+  namespace: default
+spec:
+  selector:
+    app: linux-sandbox-alpine
+  ports:
+  - port: 7681
+    targetPort: 7681
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-sandbox-svc
+  namespace: default
+spec:
+  selector:
+    app: python-sandbox
+  ports:
+  - port: 7681
+    targetPort: 7681
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cpp-sandbox-svc
+  namespace: default
+spec:
+  selector:
+    app: cpp-sandbox
+  ports:
+  - port: 7681
+    targetPort: 7681
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: linux-sandbox-debian-svc
+  namespace: default
+spec:
+  selector:
+    app: linux-sandbox-debian
+  ports:
+  - port: 7681
+    targetPort: 7681
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sandbox-ingress
+  namespace: default
+spec:
+  rules:
+  - host: homelab.local
+    http:
+      paths:
+      - path: /alpine
+        pathType: Prefix
+        backend:
+          service:
+            name: linux-sandbox-alpine-svc
+            port:
+              number: 7681
+      - path: /python
+        pathType: Prefix
+        backend:
+          service:
+            name: python-sandbox-svc
+            port:
+              number: 7681
+      - path: /cpp
+        pathType: Prefix
+        backend:
+          service:
+            name: cpp-sandbox-svc
+            port:
+              number: 7681
+      - path: /debian
+        pathType: Prefix
+        backend:
+          service:
+            name: linux-sandbox-debian-svc
+            port:
+              number: 7681
