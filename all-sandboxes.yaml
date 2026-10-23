@@ -279,3 +279,34 @@ spec:
             name: linux-sandbox-debian-svc
             port:
               number: 7681
+  - host: laptop-server.local
+    http:
+      paths:
+      - path: /alpine
+        pathType: Prefix
+        backend:
+          service:
+            name: linux-sandbox-alpine-svc
+            port:
+              number: 7681
+      - path: /python
+        pathType: Prefix
+        backend:
+          service:
+            name: python-sandbox-svc
+            port:
+              number: 7681
+      - path: /cpp
+        pathType: Prefix
+        backend:
+          service:
+            name: cpp-sandbox-svc
+            port:
+              number: 7681
+      - path: /debian
+        pathType: Prefix
+        backend:
+          service:
+            name: linux-sandbox-debian-svc
+            port:
+              number: 7681
