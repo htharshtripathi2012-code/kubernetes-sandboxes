@@ -57,6 +57,7 @@ metadata:
   namespace: default
 spec:
   replicas: 1
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: linux-sandbox-alpine
@@ -70,7 +71,7 @@ spec:
         image: alpine:latest
         command: ["/bin/sh", "-c"]
         args:
-        - apk add --no-cache ttyd bash vim && ttyd -W -p 7681 bash
+        - apk add --no-cache ttyd bash vim && ttyd -W -p 7681 --base-path /alpine bash
         ports:
         - containerPort: 7681
         volumeMounts:
@@ -88,6 +89,7 @@ metadata:
   namespace: default
 spec:
   replicas: 1
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: python-sandbox
@@ -106,7 +108,7 @@ spec:
           apt-get update && apt-get install -y curl wget git vim
           wget -O /usr/local/bin/ttyd https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.x86_64
           chmod +x /usr/local/bin/ttyd
-          ttyd -W -p 7681 bash
+          ttyd -W -p 7681 --base-path /python bash
         ports:
         - containerPort: 7681
         volumeMounts:
@@ -124,6 +126,7 @@ metadata:
   namespace: default
 spec:
   replicas: 1
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: cpp-sandbox
@@ -142,7 +145,7 @@ spec:
           apt-get update && apt-get install -y curl wget git make vim
           wget -O /usr/local/bin/ttyd https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.x86_64
           chmod +x /usr/local/bin/ttyd
-          ttyd -W -p 7681 bash
+          ttyd -W -p 7681 --base-path /cpp bash
         ports:
         - containerPort: 7681
         volumeMounts:
@@ -160,6 +163,7 @@ metadata:
   namespace: default
 spec:
   replicas: 1
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: linux-sandbox-debian
@@ -178,7 +182,7 @@ spec:
           apt-get update && apt-get install -y curl wget git vim
           wget -O /usr/local/bin/ttyd https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.x86_64
           chmod +x /usr/local/bin/ttyd
-          ttyd -W -p 7681 bash
+          ttyd -W -p 7681 --base-path /debian bash
         ports:
         - containerPort: 7681
         volumeMounts:
