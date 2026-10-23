@@ -71,7 +71,7 @@ spec:
         image: alpine:latest
         command: ["/bin/sh", "-c"]
         args:
-        - apk add --no-cache ttyd bash vim && ttyd -W -p 7681 bash
+        - apk add --no-cache ttyd bash vim btop htop && ttyd -W -p 7681 bash
         ports:
         - containerPort: 7681
         volumeMounts:
@@ -105,7 +105,7 @@ spec:
         command: ["/bin/bash", "-c"]
         args:
         - |
-          apt-get update && apt-get install -y curl wget git vim
+          apt-get update && apt-get install -y curl wget git vim btop htop
           wget -O /usr/local/bin/ttyd https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.x86_64
           chmod +x /usr/local/bin/ttyd
           ttyd -W -p 7681 bash
@@ -142,7 +142,7 @@ spec:
         command: ["/bin/bash", "-c"]
         args:
         - |
-          apt-get update && apt-get install -y curl wget git make vim
+          apt-get update && apt-get install -y curl wget git make vim btop htop
           wget -O /usr/local/bin/ttyd https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.x86_64
           chmod +x /usr/local/bin/ttyd
           ttyd -W -p 7681 bash
@@ -179,7 +179,7 @@ spec:
         command: ["/bin/bash", "-c"]
         args:
         - |
-          apt-get update && apt-get install -y curl wget git vim
+          apt-get update && apt-get install -y curl wget git vim btop htop
           wget -O /usr/local/bin/ttyd https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.x86_64
           chmod +x /usr/local/bin/ttyd
           ttyd -W -p 7681 bash
