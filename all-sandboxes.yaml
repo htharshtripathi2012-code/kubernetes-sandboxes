@@ -70,7 +70,7 @@ spec:
         image: alpine:latest
         command: ["/bin/sh", "-c"]
         args:
-        - apk add --no-cache ttyd bash && ttyd -W -p 7681 bash
+        - apk add --no-cache ttyd bash && ttyd -W -p 7681 -b /alpine bash
         ports:
         - containerPort: 7681
         volumeMounts:
@@ -106,7 +106,7 @@ spec:
           apt-get update && apt-get install -y curl wget git vim
           wget -O /usr/local/bin/ttyd https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.x86_64
           chmod +x /usr/local/bin/ttyd
-          ttyd -W -p 7681 bash
+          ttyd -W -p 7681 -b /python bash
         ports:
         - containerPort: 7681
         volumeMounts:
@@ -142,7 +142,7 @@ spec:
           apt-get update && apt-get install -y curl wget git make
           wget -O /usr/local/bin/ttyd https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.x86_64
           chmod +x /usr/local/bin/ttyd
-          ttyd -W -p 7681 bash
+          ttyd -W -p 7681 -b /cpp bash
         ports:
         - containerPort: 7681
         volumeMounts:
@@ -178,7 +178,7 @@ spec:
           apt-get update && apt-get install -y curl wget git vim
           wget -O /usr/local/bin/ttyd https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.x86_64
           chmod +x /usr/local/bin/ttyd
-          ttyd -W -p 7681 bash
+          ttyd -W -p 7681 -b /debian bash
         ports:
         - containerPort: 7681
         volumeMounts:
