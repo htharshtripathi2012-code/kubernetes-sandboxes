@@ -71,9 +71,7 @@ spec:
         image: alpine:latest
         command: ["/bin/sh", "-c"]
         args:
-        - apk add --no-cache ttyd bash vim btop htop && ttyd -W -p 7681 bash
-        ports:
-        - containerPort: 7681
+        - "while true; do sleep 3600; done"
         resources:
           requests:
             memory: "128Mi"
@@ -81,18 +79,6 @@ spec:
           limits:
             memory: "512Mi"
             cpu: "500m"
-        livenessProbe:
-          httpGet:
-            path: /
-            port: 7681
-          initialDelaySeconds: 10
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 7681
-          initialDelaySeconds: 5
-          periodSeconds: 5
         volumeMounts:
         - mountPath: /workspace
           name: storage
@@ -123,13 +109,7 @@ spec:
         imagePullPolicy: IfNotPresent
         command: ["/bin/bash", "-c"]
         args:
-        - |
-          apt-get update && apt-get install -y curl wget git vim btop htop
-          wget -O /usr/local/bin/ttyd https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.x86_64
-          chmod +x /usr/local/bin/ttyd
-          ttyd -W -p 7681 bash
-        ports:
-        - containerPort: 7681
+        - "while true; do sleep 3600; done"
         resources:
           requests:
             memory: "256Mi"
@@ -137,18 +117,6 @@ spec:
           limits:
             memory: "1Gi"
             cpu: "1000m"
-        livenessProbe:
-          httpGet:
-            path: /
-            port: 7681
-          initialDelaySeconds: 15
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 7681
-          initialDelaySeconds: 10
-          periodSeconds: 5
         volumeMounts:
         - mountPath: /workspace
           name: storage
@@ -176,16 +144,10 @@ spec:
       containers:
       - name: ttyd
         image: gcc:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         command: ["/bin/bash", "-c"]
         args:
-        - |
-          apt-get update && apt-get install -y curl wget git make vim btop htop
-          wget -O /usr/local/bin/ttyd https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.x86_64
-          chmod +x /usr/local/bin/ttyd
-          ttyd -W -p 7681 bash
-        ports:
-        - containerPort: 7681
+        - "while true; do sleep 3600; done"
         resources:
           requests:
             memory: "512Mi"
@@ -193,18 +155,6 @@ spec:
           limits:
             memory: "2Gi"
             cpu: "2000m"
-        livenessProbe:
-          httpGet:
-            path: /
-            port: 7681
-          initialDelaySeconds: 20
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 7681
-          initialDelaySeconds: 15
-          periodSeconds: 5
         volumeMounts:
         - mountPath: /workspace
           name: storage
@@ -235,13 +185,7 @@ spec:
         imagePullPolicy: IfNotPresent
         command: ["/bin/bash", "-c"]
         args:
-        - |
-          apt-get update && apt-get install -y curl wget git vim btop htop
-          wget -O /usr/local/bin/ttyd https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.x86_64
-          chmod +x /usr/local/bin/ttyd
-          ttyd -W -p 7681 bash
-        ports:
-        - containerPort: 7681
+        - "while true; do sleep 3600; done"
         resources:
           requests:
             memory: "256Mi"
@@ -249,18 +193,6 @@ spec:
           limits:
             memory: "1Gi"
             cpu: "1000m"
-        livenessProbe:
-          httpGet:
-            path: /
-            port: 7681
-          initialDelaySeconds: 15
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 7681
-          initialDelaySeconds: 10
-          periodSeconds: 5
         volumeMounts:
         - mountPath: /workspace
           name: storage
@@ -371,17 +303,6 @@ spec:
         matchLabels:
           kubernetes.io/metadata.name: kube-system
   egress:
-  # Allow internal cluster DNS lookups so resolving works if needed
-  - to:
-    - namespaceSelector: {}
-      podSelector:
-        matchLabels:
-          k8s-app: kube-dns
-    ports:
-    - protocol: UDP
-      port: 53
-    - protocol: TCP
-      port: 53
   - to:
     - ipBlock:
         cidr: 0.0.0.0/0
