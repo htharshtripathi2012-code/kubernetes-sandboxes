@@ -74,6 +74,13 @@ spec:
         - apk add --no-cache ttyd bash vim btop htop && ttyd -W -p 7681 bash
         ports:
         - containerPort: 7681
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
         volumeMounts:
         - mountPath: /workspace
           name: storage
@@ -111,6 +118,13 @@ spec:
           ttyd -W -p 7681 bash
         ports:
         - containerPort: 7681
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
         volumeMounts:
         - mountPath: /workspace
           name: storage
@@ -148,6 +162,13 @@ spec:
           ttyd -W -p 7681 bash
         ports:
         - containerPort: 7681
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "2Gi"
+            cpu: "2000m"
         volumeMounts:
         - mountPath: /workspace
           name: storage
@@ -185,6 +206,13 @@ spec:
           ttyd -W -p 7681 bash
         ports:
         - containerPort: 7681
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
         volumeMounts:
         - mountPath: /workspace
           name: storage
@@ -248,3 +276,80 @@ spec:
   - port: 7681
     targetPort: 7681
     nodePort: 30087
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: sandbox-ingress-route
+  namespace: default
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`sandbox.local`) && PathPrefix(`/alpine`)
+    kind: Rule
+    services:
+    - name: linux-sandbox-alpine-svc
+      port: 7681
+  - match: Host(`sandbox.local`) && PathPrefix(`/python`)
+    kind: Rule
+    services:
+    - name: python-sandbox-svc
+      port: 7681
+  - match: Host(`sandbox.local`) && PathPrefix(`/cpp`)
+    kind: Rule
+    services:
+    - name: cpp-sandbox-svc
+      port: 7681
+  - match: Host(`sandbox.local`) && PathPrefix(`/debian`)
+    kind: Rule
+    services:
+    - name: linux-sandbox-debian-svc
+      port: 7681
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: isolate-sandboxes
+  namespace: default
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+  egress:
+  # Allow DNS resolution so the pods can resolve package servers and GitHub
+  - to:
+    - namespaceSelector: {}
+      podSelector:
+        matchLabels:
+          k8s-app: kube-dns
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+  # Allow general outbound internet access (needed for apt-get/wget to GitHub and mirrors)
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+        except:
+        - 10.0.0.0/8
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: sandbox-quota
+  namespace: default
+spec:
+  hard:
+    pods: "10"
+    requests.cpu: "4"
+    requests.memory: "8Gi"
+    limits.cpu: "8"
+    limits.memory: "16Gi"
