@@ -215,7 +215,7 @@ spec:
   ports:
   - port: 7681
     targetPort: 7681
-    nodePort: 30082
+    nodePort: 30085
 ---
 apiVersion: v1
 kind: Service
@@ -229,7 +229,7 @@ spec:
   ports:
   - port: 7681
     targetPort: 7681
-    nodePort: 30083
+    nodePort: 30086
 ---
 apiVersion: v1
 kind: Service
@@ -243,4 +243,4 @@ spec:
   ports:
   - port: 7681
     targetPort: 7681
-    nodePort: 30084
+    nodePort: 30087
